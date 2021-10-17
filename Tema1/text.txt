@@ -1,0 +1,1 @@
+This is a text. It will be crypted and sent to node B.
