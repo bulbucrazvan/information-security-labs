@@ -25,7 +25,7 @@ char* aes_decrypt(char *userKey, char *cipherText) {
 char* ecb_encrypt(char* userKey, char* plainText) {
     int textLength = strlen(plainText);
     char* cipherText = malloc(textLength + 1);
-    int fullBlocks = textLength / 16, lastBlock = (textLength % 16 > 0);
+    int fullBlocks = textLength / AES_BLOCK_SIZE, lastBlock = (textLength % AES_BLOCK_SIZE > 0);
     char* cipherBlock = malloc(AES_BLOCK_SIZE);
     for (int i = 0; i < (fullBlocks + lastBlock); i++) {
         cipherBlock = aes_encrypt(userKey, (plainText + AES_BLOCK_SIZE * i));
@@ -37,7 +37,7 @@ char* ecb_encrypt(char* userKey, char* plainText) {
 char* ecb_decrypt(char* userKey, char* cipherText) {
     int textLength = strlen(cipherText);
     char* decryptedText = malloc(textLength + 1);
-    int fullBlocks = textLength / 16, lastBlock = (textLength % 16 > 0);
+    int fullBlocks = textLength / AES_BLOCK_SIZE, lastBlock = (textLength % AES_BLOCK_SIZE > 0);
     char* decryptedBlock = malloc(AES_BLOCK_SIZE);
     for (int i = 0; i < (fullBlocks + lastBlock); i++) {
         decryptedBlock = aes_decrypt(userKey, (cipherText + AES_BLOCK_SIZE * i));
@@ -45,6 +45,7 @@ char* ecb_decrypt(char* userKey, char* cipherText) {
     } 
     return decryptedText;
 }
+
 
 char* performXOR(char* blockOne, char* blockTwo) {
     char *result = malloc(AES_BLOCK_SIZE);
@@ -57,7 +58,7 @@ char* performXOR(char* blockOne, char* blockTwo) {
 char* cbc_encrypt(char* userKey, char* plainText, char* initializationVector){
     int textLength = strlen(plainText);
     char* cipherText = malloc(textLength + 1);
-    int fullBlocks = textLength / 16, lastBlock = (textLength % 16 > 0);
+    int fullBlocks = textLength / AES_BLOCK_SIZE, lastBlock = (textLength % AES_BLOCK_SIZE > 0);
     char *cipherBlock = malloc(AES_BLOCK_SIZE), *XORBlock = malloc(AES_BLOCK_SIZE), *cryptBlock;
     strncpy(XORBlock, initializationVector, AES_BLOCK_SIZE);
     for (int i = 0; i < (fullBlocks + lastBlock); i++) {
@@ -72,7 +73,7 @@ char* cbc_encrypt(char* userKey, char* plainText, char* initializationVector){
 char* cbc_decrypt(char* userKey, char* cipherText, char* initializationVector) {
     int textLength = strlen(cipherText);
     char* decryptedText = malloc(textLength + 1);
-    int fullBlocks = textLength / 16, lastBlock = (textLength % 16 > 0);
+    int fullBlocks = textLength / AES_BLOCK_SIZE, lastBlock = (textLength % AES_BLOCK_SIZE > 0);
     char* decryptedBlock, *XORBlock = malloc(AES_BLOCK_SIZE), *cryptBlock = malloc(AES_BLOCK_SIZE);
     strncpy(XORBlock, initializationVector, AES_BLOCK_SIZE);
     for (int i = 0; i < (fullBlocks + lastBlock); i++) {

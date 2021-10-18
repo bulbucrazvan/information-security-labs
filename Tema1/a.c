@@ -41,13 +41,20 @@ void* getEncryptedKey(void* args) {
     endConnection(socketDescriptor);
 }
 
+char* getEncryptionMode() {
+    char* encryptionMode = malloc(20);
+    do {
+        printf("Type encryption mode: ");
+        scanf("%s", encryptionMode);
+    } while (strcmp(encryptionMode, "ECB") && strcmp(encryptionMode, "CBC"));
+    return encryptionMode;
+}
+
 int main() {
     char* receivedKey;
     pthread_t keyManagerThread;
     pthread_create(&keyManagerThread, NULL, getEncryptedKey, receivedKey);
-    printf("Type encryption mode: ");
-    char* encryptionMode = malloc(20);
-    scanf("%s", encryptionMode);
+    char* encryptionMode = getEncryptionMode();
     int socketDescriptor = initializeConnection(IP, B_PORT);
     sendMessage(socketDescriptor, encryptionMode);
     pthread_join(keyManagerThread, NULL);
